@@ -1,7 +1,3 @@
-FROM ubuntu:18.04 as env
-RUN apt-get update
-RUN apt-get install build-essential libssl1.0.0 libasound2 -y
-
 FROM openjdk:8-jdk-alpine as build
 WORKDIR /workspace/app
 
@@ -14,7 +10,9 @@ RUN chmod +x mvnw
 RUN ./mvnw install -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
-FROM openjdk:8-jdk-alpine
+FROM ubuntu:18.04
+RUN apt-get update
+RUN apt-get install build-essential libssl1.0.0 libasound2 openjdk-8-jdk -y
 VOLUME /tmp
 ARG DEPENDENCY=/workspace/app/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
