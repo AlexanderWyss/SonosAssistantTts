@@ -12,7 +12,7 @@ RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM ubuntu:18.04
 RUN apt-get update
-RUN apt-get install build-essential libssl1.0.0 libasound2
+RUN apt-get install build-essential libssl1.0.0 libasound2 -y
 VOLUME /tmp
 ARG DEPENDENCY=/workspace/app/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
